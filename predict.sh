@@ -6,4 +6,4 @@ python ./src/predict.py \
     --block char \
     --model shiba \
     --batch_size 32 \
-    --cuda 3
+    --cuda 0

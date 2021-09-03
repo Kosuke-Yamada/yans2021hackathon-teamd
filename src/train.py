@@ -8,11 +8,12 @@ import random
 import argparse
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
+from seqeval.metrics import f1_score
 
 import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from seqeval.metrics import f1_score
 from transformers import AutoTokenizer, AutoModel
 from shiba import Shiba, CodepointTokenizer, get_pretrained_state_dict
 
@@ -120,10 +121,8 @@ if __name__ == "__main__":
     log_dict = {}
     best_valid_f1, best_epoch, early_stopping = 0, 0, 0
     for epoch in range(MAX_EPOCH):  
-        print()
-        print(f'Epoch: {epoch:02}')
+        bar = tqdm(total=len(train_ds))
         
-        start_time = time.time()
         model.to(device).train()        
         train_loss = 0
         for inputs, attention_masks, labels in train_dl:
@@ -134,13 +133,15 @@ if __name__ == "__main__":
             optimizer.step()        
             optimizer.zero_grad()
             train_loss += loss.item()  
+            
+            bar.set_description(f"Train Epoch: {epoch+1}")
+            bar.set_postfix({"Train loss": loss.item()})
+            bar.update(BATCH_SIZE)
+            
         train_loss /= len(train_dl)
-        end_time = time.time()
-        train_mins, train_secs = epoch_time(start_time, end_time)
-        print(f'Time: {train_mins}m {train_secs}s')        
-        print(f'Train Loss: {train_loss:.9f}')          
         
-        start_time = time.time()
+        bar = tqdm(total=len(valid_page2plain))
+        
         valid_f1 = 0
         for page_id in list(valid_page2plain.keys()):
             page2plain = {page_id:valid_page2plain[page_id]}
@@ -166,13 +167,15 @@ if __name__ == "__main__":
             total_preds = _total_preds[(_total_labels != -1).nonzero(as_tuple=True)].reshape(_total_preds.shape[0], -1)
 
             bio_labels = decode_attr_bio(total_labels.tolist(), idx2attr, idx2bio)
-            bio_preds = decode_attr_bio(total_preds.tolist(), idx2attr, idx2bio)            
-            valid_f1 += f1_score(bio_labels, bio_preds)
-        valid_f1 /= len(valid_page2plain.keys())        
-        end_time = time.time()
-        valid_mins, valid_secs = epoch_time(start_time, end_time)
-        print(f'Time: {valid_mins}m {valid_secs}s')        
-        print(f'Valid F1: {valid_f1:.6f}')
+            bio_preds = decode_attr_bio(total_preds.tolist(), idx2attr, idx2bio)
+            f1 = f1_score(bio_labels, bio_preds)        
+            valid_f1 += f1
+            
+            bar.set_description(f"Valid Epoch: {epoch+1}")
+            bar.set_postfix({"Valid f1": f1})
+            bar.update(1)
+            
+        valid_f1 /= len(valid_page2plain.keys())                
         
         torch.save(model.to('cpu').state_dict(), OUTPUT_PATH+'model_'+str(epoch).zfill(2)+'.pt')
 
@@ -181,20 +184,15 @@ if __name__ == "__main__":
             torch.save(model.to('cpu').state_dict(), OUTPUT_PATH+'best_model.pt')
             best_epoch = epoch        
             early_stopping = 0
-            print('***BEST_VALID_F1***')
         else:
             early_stopping += 1
 
         log_dict[str(epoch)] = {
                                 'epoch':epoch,
-                                'train_epoch_mins':train_mins,
-                                'train_epoch_secs':train_secs,
-                                'valid_epoch_mins':valid_mins,
-                                'valid_epoch_secs':valid_secs,
                                 'train_loss':train_loss,
                                 'valid_f1':valid_f1,
                                 'best_epoch':best_epoch,
-                                'best_valid_f1': best_valid_f1,                            
+                                'best_valid_f1': best_valid_f1,                           
                                 }
         with open(OUTPUT_PATH+'log.json', 'w') as f:
             json.dump(log_dict, f, indent=4, ensure_ascii=False)

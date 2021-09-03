@@ -11,4 +11,4 @@ python ./src/train.py \
     --learning_rate 1e-5 \
     --grad_clip 1.0 \
     --seed 0 \
-    --cuda 3
+    --cuda 0

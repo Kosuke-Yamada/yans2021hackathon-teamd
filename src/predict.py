@@ -9,10 +9,10 @@ import random
 import argparse
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 
 import torch
 from torch.utils.data import DataLoader
-from seqeval.metrics import f1_score
 from transformers import AutoTokenizer, AutoModel
 from shiba import Shiba, CodepointTokenizer, get_pretrained_state_dict
 
@@ -80,9 +80,10 @@ if __name__ == "__main__":
         model = ShibaForSequenceLabeling(shiba, attr_size=len(attr2idx), label_size=len(bio2idx))
     model.load_state_dict(torch.load(OUTPUT_PATH+'best_model.pt'))
     
+    bar = tqdm(total=len(pred_page2plain))
+    
     result_list = []
     for idx, page_id in enumerate(list(pred_page2plain.keys())):    
-        print(idx, page_id)
         page2plain = {page_id:pred_page2plain[page_id]}
         if MODEL == 'charbert':
             ds = CharbertDataset(page2plain, tokenizer, attr2idx, bio2idx, MAX_LENGTH, BLOCK, None)            
@@ -132,6 +133,7 @@ if __name__ == "__main__":
                 pre_bio = bio
             if bio in ['B', 'I']:
                 result_list.append(result)                
+        bar.update(1)
         
     df_result = pd.DataFrame(result_list)
     df_result.to_json(OUTPUT_PATH+'predict.json', orient='records', force_ascii=False, lines=True)
