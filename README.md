@@ -2,14 +2,14 @@
 
 - [NLP若手の会 (YANS) 第16回シンポジウム ハッカソン](https://yans.anlp.jp/entry/yans2021hackathon) におけるDチームのソースコードです．
 - タスクはWikipedia記事から各カテゴリに設定された属性の値を抽出するタスクです．
-- 最終提出は我々のモデルに加えて，森羅2019ベースラインシステム(https://www.anlp.jp/proceedings/annual_meeting/2020/pdf_dir/F4-2.pdf)とBERTベースラインシステム(https://github.com/ujiuji1259/shinra-attribute-extraction)とのアンサンブルしたものになっています．
+- 最終提出は我々のモデルに加えて，[森羅2019ベースラインシステム](https://www.anlp.jp/proceedings/annual_meeting/2020/pdf_dir/F4-2.pdf)とBERTベースラインシステム(https://github.com/ujiuji1259/shinra-attribute-extraction)とのアンサンブルしたものになっています．
 - 詳細は後日ハッカソンページ内で公開されるスライドをご確認ください．
 - [リーダーボード](https://yans2021hackathon.pythonanywhere.com/)の順位は3位、最終順位は3位でした．
 
 ## モデルの概要
 
 - 文字ベースのモデルを用い，IOB2形式のラベルによる系列ラベリングとしてタスクを解いています．
-- 文字ベースのモデルは東北大BERT(https://huggingface.co/cl-tohoku/bert-base-japanese-char-whole-word-masking)とSHIBA(https://github.com/octanove/shiba)を利用しています．
+- 文字ベースのモデルは[東北大BERT](https://huggingface.co/cl-tohoku/bert-base-japanese-char-whole-word-masking)と[SHIBA](https://github.com/octanove/shiba)を利用しています．
 
 ## 学習
 `sh train.sh`
