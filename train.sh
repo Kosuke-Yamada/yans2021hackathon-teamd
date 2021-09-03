@@ -1,0 +1,14 @@
+python ./src/train.py \
+    --input_plain_path ./dataset/yans2021hackathon_plain/ \
+    --input_annotation_path ./dataset/yans2021hackathon_annotation/ \
+    --output_path ./output/ \
+    --category Company \
+    --block char \
+    --model shiba \
+    --max_length 2048 \
+    --batch_size 8 \
+    --max_epoch 200 \
+    --learning_rate 1e-5 \
+    --grad_clip 1.0 \
+    --seed 0 \
+    --cuda 3
