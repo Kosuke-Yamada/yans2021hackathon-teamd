@@ -8,7 +8,7 @@
 ## モデルの概要
 
 - 文字ベースのモデルを用い，IOB2形式のラベルによる系列ラベリングとしてタスクを解いています．
-- 文字ベースのモデルは[東北大BERT](https://huggingface.co/cl-tohoku/bert-base-japanese-char-whole-word-masking)と[SHIBA](https://github.com/octanove/shiba)を利用しています．
+- モデルは[東北大BERT](https://huggingface.co/cl-tohoku/bert-base-japanese-char-whole-word-masking)と[SHIBA](https://github.com/octanove/shiba)を利用しています．
 
 ## 学習
 `sh train.sh`
