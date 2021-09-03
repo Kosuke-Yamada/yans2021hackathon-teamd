@@ -53,6 +53,8 @@ if __name__ == "__main__":
     
     set_seed(SEED)
     device = torch.device("cuda:"+str(CUDA) if torch.cuda.is_available() else "cpu")
+    
+    print('read annotation files')
 
     df = pd.read_json(INPUT_ANNOTATION_PATH+CATEGORY+'_dist.json', orient='records', lines=True)
         
@@ -63,10 +65,14 @@ if __name__ == "__main__":
             
     page_id_list = [int(path.split('/')[-1][:-4]) for path in sorted(glob.glob(INPUT_PLAIN_PATH+CATEGORY+'/*'))]
     
+    print('read plain files')
+    
     pred_page2plain = {}
     for page_id in page_id_list:  
         with open(INPUT_PLAIN_PATH+CATEGORY+'/'+str(page_id)+'.txt', 'r') as f:
             pred_page2plain[page_id] = f.readlines() 
+            
+    print('load models')
     
     if MODEL == 'charbert':
         pretrained_model = 'cl-tohoku/bert-base-japanese-char-whole-word-masking'

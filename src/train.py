@@ -38,7 +38,8 @@ def parse_arg():
     parser.add_argument("--cuda", type=int)
     return parser.parse_args()
 
-if __name__ == "__main__":   
+if __name__ == "__main__":       
+    
     args = parse_arg()
     
     INPUT_PLAIN_PATH = args.input_plain_path
@@ -73,7 +74,9 @@ if __name__ == "__main__":
     set_seed(SEED)
     device = torch.device("cuda:"+str(CUDA) if torch.cuda.is_available() else "cpu")
     
-    df = pd.read_json(INPUT_ANNOTATION_PATH+CATEGORY+'_dist.json', orient='records', lines=True)
+    print('read annotation files')
+    
+    df = pd.read_json(INPUT_ANNOTATION_PATH+CATEGORY+'_dist.json', orient='records', lines=True)        
     
     attr2idx = {attr:i for i, attr in enumerate(sorted(set(df['attribute'])))}
     idx2attr = {v:k for k, v in attr2idx.items()}
@@ -88,6 +91,8 @@ if __name__ == "__main__":
     page2tvt.update({i:'test' for i in page_id_list[950:]})
     df['tvt'] = df['page_id'].map(page2tvt)
     
+    print('read plain files')
+    
     df_train = df[df['tvt'] == 'train']
     page_id_list = sorted(set(df_train['page_id']))
     train_page2plain = {}
@@ -101,6 +106,8 @@ if __name__ == "__main__":
     for page_id in page_id_list:  
         with open(INPUT_PLAIN_PATH+CATEGORY+'/'+str(page_id)+'.txt', 'r') as f:
             valid_page2plain[page_id] = f.readlines() 
+            
+    print('load models')
     
     if MODEL == 'charbert':
         pretrained_model = 'cl-tohoku/bert-base-japanese-char-whole-word-masking'
