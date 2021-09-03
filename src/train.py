@@ -126,8 +126,8 @@ if __name__ == "__main__":
         start_time = time.time()
         model.to(device).train()        
         train_loss = 0
-        for inputs, am, labels in train_dl:
-            output = model(inputs.to(device), am.to(device), labels.to(device))
+        for inputs, attention_masks, labels in train_dl:
+            output = model(inputs.to(device), attention_masks.to(device), labels.to(device))
             loss = output[0]
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), GRAD_CLIP)
@@ -152,10 +152,10 @@ if __name__ == "__main__":
                 dl = DataLoader(ds, batch_size=BATCH_SIZE, collate_fn=collate_fn)
 
             _total_labels, _total_preds = torch.LongTensor(), torch.LongTensor()
-            for inputs, am, labels in dl:
+            for inputs, attention_masks, labels in dl:
                 with torch.no_grad():            
                     model.to(device).eval()
-                    output = model(inputs.to(device), am.to(device), labels.to(device))        
+                    output = model(inputs.to(device), attention_masks.to(device), labels.to(device))        
                 probs = torch.stack(output[1]).transpose(0, 1).cpu()
                 preds = probs.argmax(axis=-1)
 
