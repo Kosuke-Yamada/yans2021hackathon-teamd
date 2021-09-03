@@ -11,7 +11,9 @@
 - モデルは[東北大BERT](https://huggingface.co/cl-tohoku/bert-base-japanese-char-whole-word-masking)と[SHIBA](https://github.com/octanove/shiba)を利用しています．
 
 ## 学習
-`sh train.sh`
+```bash
+sh train.sh
+```
 
 | args | candidates |
 |---|---|
@@ -44,7 +46,9 @@ python ./src/train.py \
 - `--input_annotatioin_path`にある`./dataset/yans2021hackathon_annotation/`の内部には，`(カテゴリ名)_dist.json`となっています．
 
 ## 予測
-`sh predict.sh`
+```bash
+sh predict.sh
+```
 
 ### predict.shの例
 ```bash
