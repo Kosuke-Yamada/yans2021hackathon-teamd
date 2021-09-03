@@ -2,7 +2,7 @@
 
 - [NLP若手の会 (YANS) 第16回シンポジウム ハッカソン](https://yans.anlp.jp/entry/yans2021hackathon) におけるDチームのソースコードです．
 - タスクはWikipedia記事から各カテゴリに設定された属性の値を抽出するタスクです．
-- 最終提出は我々のモデルに加えて，[森羅2019ベースラインシステム](https://www.anlp.jp/proceedings/annual_meeting/2020/pdf_dir/F4-2.pdf)とBERTベースラインシステム(https://github.com/ujiuji1259/shinra-attribute-extraction)とのアンサンブルしたものになっています．
+- 最終提出は我々のモデルに加えて，[森羅2019ベースラインシステム](https://www.anlp.jp/proceedings/annual_meeting/2020/pdf_dir/F4-2.pdf)と[BERTベースラインシステム](https://github.com/ujiuji1259/shinra-attribute-extraction)とのアンサンブルしたものになっています．
 - 詳細は後日ハッカソンページ内で公開されるスライドをご確認ください．
 - [リーダーボード](https://yans2021hackathon.pythonanywhere.com/)の順位は3位、最終順位は3位でした．
 
