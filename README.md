@@ -21,8 +21,8 @@ sh train.sh
 | --block | line / char |
 | --model | shiba / charbert |
 
-- `--block`は，`line`は一行ずつ処理，`char`は最大文字数ずつ処理する仕様になっています．
-- `--max_length`は，`--model`が`shiba`ならば`2048`が上限，`charbert`ならば`512`が上限になっています．
+- `--block`は，`line`は一行ずつ処理，`char`は最大文字数ずつ処理する仕様です．
+- `--max_length`は，`--model`が`shiba`ならば`2048`，`charbert`ならば`512`が上限です．
 
 ### train.shの例
 ```bash
@@ -42,8 +42,8 @@ python ./src/train.py \
     --cuda 0
 ```
 
-- `--input_plain_path`にある`./dataset/yans2021hackathon_plain/`の内部には，`(カテゴリ名)/(ページID).txt`となっています．
-- `--input_annotatioin_path`にある`./dataset/yans2021hackathon_annotation/`の内部には，`(カテゴリ名)_dist.json`となっています．
+- `--input_plain_path`の`./dataset/yans2021hackathon_plain/`の内部は，`(カテゴリ名)/(ページID).txt`が入っています．
+- `--input_annotatioin_path`の`./dataset/yans2021hackathon_annotation/`の内部は，`(カテゴリ名)_dist.json`が入っています．
 
 ## 予測
 ```bash
